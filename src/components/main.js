@@ -1,21 +1,17 @@
 import h from 'virtual-dom/h';
 import {Observable} from 'rx';
 
-import greeting_ from './greeting';
-import counter_ from './counter';
+import countClicks_ from './count-clicks';
 
-let render = (counterView, greetingView) => {
-  return 
-  <div className="container">
-    {greetingView}
-    {counterView}
+let view = (countClicks) => {
+  return <div className="container">
+    {countClicks}
   </div>;
 }
 
 let render_ = () => Observable
       .combineLatest(
-        counter_(),
-        greeting_(),
+        countClicks_(),
         view
       );
 
