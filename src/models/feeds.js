@@ -17,6 +17,6 @@ let fetchFeed = (url) => {
 let feeds_ = Observable
       .from(feedUrls)
       .flatMap(fetchFeed)
-      .map(res => res.responseData.feed.entries);
+      .map(res => res.responseData.feed);
 
 export {feeds_};      
