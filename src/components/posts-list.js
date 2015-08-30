@@ -43,11 +43,9 @@ let view = (postViews) =>
   </section>
   ;
 
-let render_ = () => {
-  return posts_
+let render_ = () => posts_
     .map(posts => posts.map(postView))
-    .reduce((acc, posts) => acc.concat(posts))
-    .map(view);
-}
+    .map(view)
+    .startWith(view());
 
 export default render_;

@@ -1,6 +1,8 @@
 import h from 'virtual-dom/h';
 import {Observable} from 'rx';
 
+import {clicksByClass_} from '../events';
+
 import {feeds_} from '../models/feeds';
 
 let nodeView = (feed, extraClasses) =>
@@ -17,31 +19,20 @@ let view = (feedViews) =>
   ;
 
 let render_ = () => {
-  return feeds_
-    .map(feed => {
-      return {url: feed.feedUrl, name: feed.title}
-    })
-    .toArray()
-    .startWith([])
-    .do(x => console.log(x))
-    .map(feeds => feeds.map(nodeView))
-    .map(view);
-}
-  
   let selectFeedClicks_ = clicksByClass_('sidebar-feed');
   selectFeedClicks_
     .do(e => e.preventDefault())
     .do(e => {
-      let activeEl = document.querySelector('.sidebar-feed.active');
-      if (activeEl) activeEl.classList.remove('active');
+        let activeEl = document.querySelector('.sidebar-feed.active');
+        if(activeEl) activeEl.classList.remove('active');
 
-      e.target.classList.add('active');
+        e.target.classList.add('active');
     })
     .subscribe();
 
   return feeds_
     .startWith([])
-    .map(feeds => feeds.map(nodeView))        
+    .map(feeds => feeds.map(nodeView))
     .map(view);
 }
 
