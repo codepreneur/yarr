@@ -1,5 +1,7 @@
+let toArray = (arrayLike) => Array.prototype.slice.call(arrayLike, 0);
+
 export default {
-  toArray: (arrayLike) => Array.prototype.slice.call(arrayLike, 0),
+  toArray: toArray,
   formatDate: (date) => {
     if (!date) return '';
 
@@ -31,4 +33,4 @@ export default {
 
     return dataAttrs[attr];
   }
-}
+};

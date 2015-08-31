@@ -41,6 +41,19 @@ let addFeed_ = (feedUrl) => Observable
           .flatMap(() => Observable.from(entries))
           .flatMap(p => addPostToDb(p, feed.feedUrl));
       });
+      
+//add default feeds
+Observable
+  .fromPromise(Feeds.count())
+  .flatMap(count => {
+    let urls = count === 0 ? feedUrls : [];
+    return Observable.from(urls);
+  })
+  .flatMap(addFeed_)      
+  .subscribe(
+    x => console.log('Succesfully added ', x),
+    e => console.log('Error while adding feed: ', e)
+  );      
 
 let fetchAllFeeds_ = () => {
   let newPosts_ = Observable
@@ -75,17 +88,6 @@ let fetchAllFeeds_ = () => {
   return addNewPosts_;
 };      
 
-Observable
-  .fromPromise(Feeds.count())
-  .flatMap(count => {
-    let urls = count === 0 ? feedUrls : [];
-    return Observable.from(urls);
-  })
-  .flatMap(addFeed_)      
-  .subscribe(
-    x => console.log('Succesfully added ', x),
-    e => console.log('Error while adding feed: ', e)
-  );
 
 let feeds_ = Observable
       .merge(

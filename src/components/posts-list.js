@@ -3,6 +3,18 @@ import {Observable} from 'rx';
 
 import {posts_} from '../models/posts';
 import {formatDate} from '../utils';
+import {clicksByClass_} from '../events';
+import {markPostAsRead_} from '../models/posts';
+
+let readPost_ = () => {
+  let readPostClicks_ = clicksByClass_('post-title');
+  return readPostClicks_
+      .do(e => e.preventDefault())
+      .map(e => e.target.href)
+      .flatMap(link => Posts.get(link))
+      .do(markPostAsRead_)
+      .startWith('');
+}
 
 let postView = (post) =>
     <article className="post-item post">
@@ -58,9 +70,10 @@ let view = (postViews) =>
 
         return result;
       })
-      )
-      .map(posts => posts.map(postView))
-      .map(view)
-      .startWith(view());
+    )
+    .map(posts => posts.map(postView))
+    .map(view)
+    .startWith(view());
 
 export default render_;
+export {readPost_};

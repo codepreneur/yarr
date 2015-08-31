@@ -45,6 +45,10 @@ let render_ = () => {
           return addNewFeed_.retry();
         });    
 
+  addNewFeed_.subscribe(
+    x => console.log(x)
+  );        
+
   return Observable
     .combineLatest(
       addFeedInputStyles_,
