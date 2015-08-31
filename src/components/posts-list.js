@@ -43,9 +43,24 @@ let view = (postViews) =>
   </section>
   ;
 
-let render_ = () => posts_
-    .map(posts => posts.map(postView))
-    .map(view)
-    .startWith(view());
+  let render_ = (feedFilters_) =>
+    Observable
+    .combineLatest(
+      posts_,
+      feedFilters_(),
+      (posts, filters) => posts.filter(post => {
+        let result = true;
+        let checks = Object.keys(filters);
+        for(let key of checks) {
+          if(post[key] !== filters[key])
+            result = false;
+        }
+
+        return result;
+      })
+      )
+      .map(posts => posts.map(postView))
+      .map(view)
+      .startWith(view());
 
 export default render_;

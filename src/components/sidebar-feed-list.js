@@ -2,8 +2,27 @@ import h from 'virtual-dom/h';
 import {Observable} from 'rx';
 
 import {clicksByClass_} from '../events';
-
+import {dataAttrAsClass} from '../utils';
 import {feeds_} from '../models/feeds';
+
+let feedFilters_ = () => {
+  let widgetClicks_ = clicksByClass_('filter-posts');
+
+  let filters_ = widgetClicks_
+    .map(e => e.target)
+    .map(el => dataAttrAsClass('filter', el))
+    .do(x => console.log(x));
+
+    return filters_;
+};
+
+let selectedFeedUrl_ = () =>
+      clicksByClass_('sidebar-feed')
+      .do(e => e.preventDefault())
+      .map(e => e.target.href.split('/').reverse()[0] === 'all-feeds'
+           ? null
+           : e.target.href);
+           
 
 let nodeView = (feed, extraClasses) =>
   <li className="sidebar-feedlist-item">
@@ -36,4 +55,5 @@ let render_ = () => {
     .map(view);
 }
 
-export default render_;    
+export default render_;
+export {selectedFeedUrl_};
